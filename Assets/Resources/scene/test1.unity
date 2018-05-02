@@ -2235,7 +2235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 819e2d5eb841de74dba784419ad450af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_sFilePath: Assets/Resources/Data/dialogText.txt
+  m_sFilePath: Data/dialogText.txt
 --- !u!114 &928275080
 MonoBehaviour:
   m_ObjectHideFlags: 0

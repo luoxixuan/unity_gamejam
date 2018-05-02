@@ -11,9 +11,11 @@ namespace Completed
 	{
 		public float turnDelay = 0.1f;							//Delay between each Player turn.
 		public int playerFoodPoints = 1000;						//Starting value for Player food points.
-		public static GameManager instance = null;				//Static instance of GameManager which allows it to be accessed by any other script.
-		[HideInInspector] public bool playersTurn = true;       //Boolean to check if it's players turn, hidden in inspector but public.
-        [HideInInspector] public bool playerInDialog = false;   //Boolean to check if players is in dialog, hidden in inspector but public.
+        public static GameManager instance = null;				//Static instance of GameManager which allows it to be accessed by any other script.
+		[HideInInspector]
+        public bool playersTurn = true;       //Boolean to check if it's players turn, hidden in inspector but public.
+        [HideInInspector]
+        public bool playerInDialog = false;   //Boolean to check if players is in dialog, hidden in inspector but public.
 
 		private int level = 1;									//Current level number, expressed in game as "Day 1".
 		private List<Enemy> enemies;							//List of all Enemy units, used to issue them move commands.
