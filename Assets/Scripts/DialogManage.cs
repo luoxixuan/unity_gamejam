@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using Newtonsoft.Json;
 
 public class DialogManage : MonoBehaviour {
-
+    //[System.Serializable]
     public class DialogItem
     {
         public string Name { get; set; }
@@ -14,6 +14,7 @@ public class DialogManage : MonoBehaviour {
         public string IconPath { get; set; }
     }
 
+    //[System.Serializable]
     public class DialogNode
     {
         public string DialogName { get; set; }
@@ -31,13 +32,16 @@ public class DialogManage : MonoBehaviour {
     private Text m_tTalkText;
     private Image m_imgIconImage;
 
+    private string startStrnig;
+
     // Use this for initialization
     void Start () {
         m_me = this;
 
         m_tTalkText = transform.Find("TalkText").GetComponent<Text>();
         m_imgIconImage = transform.Find("IconImage").GetComponent<Image>();
-
+        startStrnig = "DialogManage::Start Success!!!!!!!!!!!!!";
+        Debug.Log("DialogManage::Start!!!!!!!!!!!!!");
         LoadDialogs();
 
         gameObject.SetActive(false);
@@ -58,6 +62,7 @@ public class DialogManage : MonoBehaviour {
         JsonSerializer serializer = new JsonSerializer();
         DialogNode[] nodes = (DialogNode[])serializer.Deserialize(new JsonTextReader(sr), typeof(DialogNode[]));
         m_arrDialogArr = nodes;
+        Debug.Log("DialogManage::LoadDialogs!!!!!!!!!!!!!");
         sr.Dispose();
     }
 
@@ -92,32 +97,39 @@ public class DialogManage : MonoBehaviour {
     // 根据名称 获取对话Node
     public DialogNode GetDialogNodeByName(string name)
     {
-        Debug.Log("GetDialogNodeByName: " + name);
+        Debug.Log("DialogManage::GetDialogNodeByName: print startStrnig value （" + startStrnig +"）");
+        Debug.Log("DialogManage::GetDialogNodeByName: " + name);
         if (null != name && null != m_arrDialogArr)
         {
             for(int i = 0; i < m_arrDialogArr.Length; i++)
             {
-                if(m_arrDialogArr[i].DialogName == name)
+                Debug.Log("DialogManage::GetDialogNodeByName遍历输出json对话名字：" + m_arrDialogArr[i].DialogName);
+                if (m_arrDialogArr[i].DialogName == name)
                 {
-                    Debug.Log("GetDialogNodeByName: 取到了对话内容，第一句话是" + m_arrDialogArr[i].DialogArr[0].DialogText);
+                    Debug.Log("DialogManage::GetDialogNodeByName: 取到了对话内容，第一句话是" + m_arrDialogArr[i].DialogArr[0].DialogText);
                     return m_arrDialogArr[i];
                 }
             }
         }
+        else
+            Debug.Log("DialogManage::GetDialogNodeByName: " + name + " m_arrDialogArr is null");
         return null;
     }
 
     // 根据名称 开始对话
     public void StartDialogByName(string name)
     {
+        Debug.Log("DialogManage::StartDialogByName：" + name);
         DialogNode tempNode = GetDialogNodeByName(name);
         if(null == tempNode)
         {
+            Debug.Log("DialogManage::StartDialogByName：" + name + " tempNode is null");
             return;
         }
 
         if(null == tempNode.DialogArr || tempNode.DialogArr.Length <= 0)
         {
+            Debug.Log("DialogManage::StartDialogByName：" + name + " tempNode.DialogArr is no string");
             return;
         }
 
@@ -130,7 +142,6 @@ public class DialogManage : MonoBehaviour {
         //开始对话，角色不能移动
         Completed.GameManager.instance.playerInDialog = true;
         //Completed.GameManager.instance.playersTurn = false;
-        Debug.Log("StartDialogByName");
     }
 
     public void EndDialog()
@@ -143,7 +154,7 @@ public class DialogManage : MonoBehaviour {
         //结束对话，角色可以移动
         Completed.GameManager.instance.playerInDialog = false;
         //Completed.GameManager.instance.playersTurn = true;
-        Debug.Log("EndDialog");
+        Debug.Log("DialogManage::EndDialog");
     }
 
     // 显示单个对话Item

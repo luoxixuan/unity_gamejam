@@ -46,7 +46,9 @@ public class SceneDecorateItem : MonoBehaviour {
 	}
 
     //这个可能会被外部对象调用
-    public void doTrigger() {
+    public void doTrigger()
+    {
+        Debug.Log("SceneDecorateItem::doTrigger: " + m_eDecType);
         if (m_eDecType == DecorateType.DecType_Random)
         {
             if (null != m_lDecList && m_lDecList.Count > 0)
@@ -82,12 +84,9 @@ public class SceneDecorateItem : MonoBehaviour {
             {
                 DialogManage.m_me.StartDialogByName(m_sDialogName);
             }
-            else
-                Debug.Log("------------------------doTrigger: no string!!!!!!!----------");
             m_collider.isTrigger = false;
         }
         destroyTouchItem(); //用完就删，拔吊无情
-        Debug.Log("doTrigger: " + m_eDecType);
     }
 
     // 创建一个可以点击的叹号
@@ -117,7 +116,7 @@ public class SceneDecorateItem : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D collision)
     {
         m_gColliderGo = collision.gameObject;
-        //Debug.Log("OnTriggerEnter2D: "+m_gColliderGo.name);
+        //Debug.Log("SceneDecorateItem::OnTriggerEnter2D: "+m_gColliderGo.name);
         if (m_bIsRepeat && !isOnTrigger) //可以重复触发的东西，再次进来的时候激活下，已经触发的就不再继续触发
             //m_collider.isTrigger = true;
             createTouchItem();
@@ -130,7 +129,7 @@ public class SceneDecorateItem : MonoBehaviour {
     // 对话重复触发不知道怎么做=-=
     private void OnTriggerExit2D(Collider2D collision)
     {
-        //Debug.Log("OnTriggerExit2D: " + m_gColliderGo.name);
+        //Debug.Log("SceneDecorateItem::OnTriggerExit2D: " + m_gColliderGo.name);
         if (true == m_bIsRepeat)
         {
             //m_collider.isTrigger = true;
@@ -141,8 +140,8 @@ public class SceneDecorateItem : MonoBehaviour {
     // 碰撞时每帧检测
     private void OnTriggerStay2D(Collider2D collision)
     {
-        //Debug.Log("OnTriggerStay2D: " + m_gColliderGo.name);
-        if (m_collider.isTrigger)
+        //Debug.Log("SceneDecorateItem::OnTriggerStay2D: " + m_gColliderGo.name);
+        if (isOnTrigger)
         {
             //createTouchItem();
             if (Input.GetKeyUp(KeyCode.Backspace))

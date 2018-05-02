@@ -19,9 +19,10 @@ public class TouchItem : MonoBehaviour, IPointerClickHandler
         {
             Touch touch = Input.touches[0];
             Vector2 touchPoint = Camera.main.ScreenToWorldPoint(touch.position);
-            float distance = (gameObject.transform.position.x - touchPoint.x) * (gameObject.transform.position.y - touchPoint.y);
+            float distance = (gameObject.transform.position.x - touchPoint.x) + (gameObject.transform.position.y - touchPoint.y);
             distance = Mathf.Abs(distance);
             if (touchRadiusSquare > distance) {
+                Debug.Log("TouchItem::Update: touch item");
                 onClick();
             }
         }
@@ -39,7 +40,7 @@ public class TouchItem : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("点击");
+        Debug.Log("TouchItem::OnPointerClick: click item");
         onClick();
 
     }
