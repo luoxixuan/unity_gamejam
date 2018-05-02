@@ -56,16 +56,16 @@ namespace Completed
 		private void Update ()
 		{
 			//If it's not the player's turn, exit the function.
-			if(!GameManager.instance.playersTurn) return;
+			if(!GameManager.instance.playersTurn || GameManager.instance.playerInDialog) return;
 			
 			int horizontal = 0;  	//Used to store the horizontal move direction.
-			int vertical = 0;		//Used to store the vertical move direction.
-			
-			//Check if we are running either in the Unity editor or in a standalone build.
+			int vertical = 0;       //Used to store the vertical move direction.
+
+            //Check if we are running either in the Unity editor or in a standalone build.
 #if UNITY_STANDALONE || UNITY_WEBPLAYER
-			
-			//Get input from the input manager, round it to an integer and store in horizontal to set x axis move direction
-			horizontal = (int) (Input.GetAxisRaw ("Horizontal"));
+
+            //Get input from the input manager, round it to an integer and store in horizontal to set x axis move direction
+            horizontal = (int) (Input.GetAxisRaw ("Horizontal"));
 			
 			//Get input from the input manager, round it to an integer and store in vertical to set y axis move direction
 			vertical = (int) (Input.GetAxisRaw ("Vertical"));
@@ -75,11 +75,11 @@ namespace Completed
 			{
 				vertical = 0;
 			}
-			//Check if we are running on iOS, Android, Windows Phone 8 or Unity iPhone
+            //Check if we are running on iOS, Android, Windows Phone 8 or Unity iPhone
 #elif UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
-			
-			//Check if Input has registered more than zero touches
-			if (Input.touchCount > 0)
+
+            //Check if Input has registered more than zero touches
+            if (Input.touchCount > 0)
 			{
 				//Store the first touch detected.
 				Touch myTouch = Input.touches[0];
@@ -87,38 +87,51 @@ namespace Completed
 				//Check if the phase of that touch equals Began
 				if (myTouch.phase == TouchPhase.Began)
 				{
-					//If so, set touchOrigin to the position of that touch
-					touchOrigin = myTouch.position;
-				}
-				
-				//If the touch phase is not Began, and instead is equal to Ended and the x of touchOrigin is greater or equal to zero:
-				else if (myTouch.phase == TouchPhase.Ended && touchOrigin.x >= 0)
-				{
-					//Set touchEnd to equal the position of this touch
-					Vector2 touchEnd = myTouch.position;
-					
-					//Calculate the difference between the beginning and end of the touch on the x axis.
-					float x = touchEnd.x - touchOrigin.x;
+                    //If so, set touchOrigin to the position of that touch,之前是滑一下走一下，现在是点一下走一下
+                    //touchOrigin = myTouch.position;
+                    touchOrigin = transform.position;
+
+                }
+
+                //If the touch phase is not Began, and instead is equal to Ended and the x of touchOrigin is greater or equal to zero:
+                //else if (myTouch.phase == TouchPhase.Ended && touchOrigin.x >= 0)
+                else if (myTouch.phase == TouchPhase.Ended)
+                {
+                    //Set touchEnd to equal the position of this touch
+                    //Vector2 touchEnd = myTouch.position;
+                    Vector2 touchEnd = Camera.main.ScreenToWorldPoint(myTouch.position);
+
+                    //Calculate the difference between the beginning and end of the touch on the x axis.
+                    float x = touchEnd.x - touchOrigin.x;
 					
 					//Calculate the difference between the beginning and end of the touch on the y axis.
 					float y = touchEnd.y - touchOrigin.y;
 					
 					//Set touchOrigin.x to -1 so that our else if statement will evaluate false and not repeat immediately.
-					touchOrigin.x = -1;
+					//touchOrigin.x = -1;
 					
 					//Check if the difference along the x axis is greater than the difference along the y axis.
 					if (Mathf.Abs(x) > Mathf.Abs(y))
+                    {
 						//If x is greater than zero, set horizontal to 1, otherwise set it to -1
 						horizontal = x > 0 ? 1 : -1;
+                        horizontal = Mathf.Abs(x) > 1? horizontal : 0;
+                    }
 					else
+                    {
 						//If y is greater than zero, set horizontal to 1, otherwise set it to -1
 						vertical = y > 0 ? 1 : -1;
-				}
+                        vertical = Mathf.Abs(y) > 1? vertical : 0;
+                    }
+                    
+                    foodText.text = touchEnd.x + "," + touchEnd.y;
+
+                }
 			}
 			
 #endif //End of mobile platform dependendent compilation section started above with #elif
-			//Check if we have a non-zero value for horizontal or vertical
-			if(horizontal != 0 || vertical != 0)
+            //Check if we have a non-zero value for horizontal or vertical
+            if (horizontal != 0 || vertical != 0)
 			{
 				//Call AttemptMove passing in the generic parameter Wall, since that is what Player may interact with if they encounter one (by attacking it)
 				//Pass in horizontal and vertical as parameters to specify the direction to move Player in.
@@ -134,7 +147,7 @@ namespace Completed
 			food--;
 			
 			//Update food text display to reflect current score.
-			foodText.text = "Food: " + food;
+			//foodText.text = "Food: " + food;
 			
 			//Call the AttemptMove method of the base class, passing in the component T (in this case Wall) and x and y direction to move.
 			base.AttemptMove <T> (xDir, yDir);
@@ -146,7 +159,7 @@ namespace Completed
 			if (Move (xDir, yDir, out hit)) 
 			{
 				//Call RandomizeSfx of SoundManager to play the move sound, passing in two audio clips to choose from.
-				//SoundManager.instance.RandomizeSfx (moveSound1, moveSound2);
+				SoundManager.instance.RandomizeSfx (moveSound1, moveSound2);
 			}
 			
 			//Since the player has moved and lost food points, check if the game has ended.
@@ -211,7 +224,7 @@ namespace Completed
 				foodText.text = "+" + pointsPerSoda + " Food: " + food;
 				
 				//Call the RandomizeSfx function of SoundManager and pass in two drinking sounds to choose between to play the drinking sound effect.
-				//SoundManager.instance.RandomizeSfx (drinkSound1, drinkSound2);
+				SoundManager.instance.RandomizeSfx (drinkSound1, drinkSound2);
 				
 				//Disable the soda object the player collided with.
 				other.gameObject.SetActive (false);
@@ -253,10 +266,10 @@ namespace Completed
 			if (food <= 0) 
 			{
 				//Call the PlaySingle function of SoundManager and pass it the gameOverSound as the audio clip to play.
-				//SoundManager.instance.PlaySingle (gameOverSound);
+				SoundManager.instance.PlaySingle (gameOverSound);
 				
 				//Stop the background music.
-				//SoundManager.instance.musicSource.Stop();
+				SoundManager.instance.musicSource.Stop();
 				
 				//Call the GameOver function of GameManager.
 				GameManager.instance.GameOver ();
