@@ -118,7 +118,6 @@ public class SceneDecorateItem : MonoBehaviour {
         m_gColliderGo = collision.gameObject;
         //Debug.Log("SceneDecorateItem::OnTriggerEnter2D: "+m_gColliderGo.name);
         if (m_bIsRepeat && !isOnTrigger) //可以重复触发的东西，再次进来的时候激活下，已经触发的就不再继续触发
-            //m_collider.isTrigger = true;
             createTouchItem();
             //doTrigger();
         if (!m_bIsRepeat && m_collider.isTrigger) //不能重复触发的东西，进来直接做动作
@@ -130,10 +129,6 @@ public class SceneDecorateItem : MonoBehaviour {
     private void OnTriggerExit2D(Collider2D collision)
     {
         //Debug.Log("SceneDecorateItem::OnTriggerExit2D: " + m_gColliderGo.name);
-        if (true == m_bIsRepeat)
-        {
-            //m_collider.isTrigger = true;
-        }
         destroyTouchItem();
     }
 
@@ -143,7 +138,6 @@ public class SceneDecorateItem : MonoBehaviour {
         //Debug.Log("SceneDecorateItem::OnTriggerStay2D: " + m_gColliderGo.name);
         if (isOnTrigger)
         {
-            //createTouchItem();
             if (Input.GetKeyUp(KeyCode.Backspace))
             {
                 doTrigger(); //pc上也可以用键盘触发
