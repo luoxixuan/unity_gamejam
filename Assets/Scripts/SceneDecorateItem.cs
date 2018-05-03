@@ -48,7 +48,7 @@ public class SceneDecorateItem : MonoBehaviour {
     //这个可能会被外部对象调用
     public void doTrigger()
     {
-        Debug.Log("SceneDecorateItem::doTrigger: " + m_eDecType);
+        //Debug.Log("SceneDecorateItem::doTrigger: " + m_eDecType);
         if (m_eDecType == DecorateType.DecType_Random)
         {
             if (null != m_lDecList && m_lDecList.Count > 0)

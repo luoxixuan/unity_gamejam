@@ -34,8 +34,6 @@ public class DialogManage : MonoBehaviour {
     private Text m_tTalkText;
     private Image m_imgIconImage;
 
-    private WWW m_loadedStreamingAssets; //异步加载的数据
-
     // Use this for initialization
     void Start () {
         m_me = this;
@@ -117,7 +115,7 @@ public class DialogManage : MonoBehaviour {
                 //Debug.Log("DialogManage::GetDialogNodeByName遍历输出json对话名字：" + m_arrDialogArr[i].DialogName);
                 if (m_arrDialogArr[i].DialogName == name)
                 {
-                    Debug.Log("DialogManage::GetDialogNodeByName: 取到了对话内容，第一句话是" + m_arrDialogArr[i].DialogArr[0].DialogText);
+                    //Debug.Log("DialogManage::GetDialogNodeByName: 取到了对话内容，第一句话是" + m_arrDialogArr[i].DialogArr[0].DialogText);
                     return m_arrDialogArr[i];
                 }
             }
@@ -150,7 +148,6 @@ public class DialogManage : MonoBehaviour {
 
         //开始对话，角色不能移动
         Completed.GameManager.instance.playerInDialog = true;
-        //Completed.GameManager.instance.playersTurn = false;
     }
 
     public void EndDialog()
@@ -160,9 +157,8 @@ public class DialogManage : MonoBehaviour {
         m_curDialogNode = null;
         gameObject.SetActive(false);
 
-        //结束对话，角色可以移动
+        //结束对话
         Completed.GameManager.instance.playerInDialog = false;
-        //Completed.GameManager.instance.playersTurn = true;
         //Debug.Log("DialogManage::EndDialog");
     }
 
