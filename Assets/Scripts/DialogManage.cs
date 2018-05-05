@@ -22,9 +22,9 @@ public class DialogManage : MonoBehaviour {
         public List<DialogItem> DialogArr { get; set; }
     }
     public static DialogManage m_me;
-    [HideInInspector]
-    public string m_sFilePath = "Data/dialogText.txt";
 
+
+    private string m_sFilePath = "Data/dialogText.txt"; //对话的配置文件路径,这个还是不要弄成public的了，不然代码里改了在编辑器里总是要reset脚本才生效
     private bool m_bIsStartDialog;  // 是否开始对话
     //private DialogNode[] m_arrDialogArr;    // 对话List
     private List<DialogNode> m_arrDialogArr;    // 对话List
@@ -51,30 +51,31 @@ public class DialogManage : MonoBehaviour {
 
     private void LoadDialogs()
     {
-#if UNITY_STANDALONE || UNITY_IPHONE
+        /*
+        #if UNITY_STANDALONE || UNITY_IPHONE
 
-        m_sFilePath = Application.streamingAssetsPath + "/" + m_sFilePath;
-        if (false == File.Exists(m_sFilePath))
-        {
-            Debug.Log("DialogManage::LoadDialogs File Not Exists! " + m_sFilePath);
-            return;
-        }
+                m_sFilePath = Application.streamingAssetsPath + "/" + m_sFilePath;
+                if (false == File.Exists(m_sFilePath))
+                {
+                    Debug.Log("DialogManage::LoadDialogs File Not Exists! " + m_sFilePath);
+                    return;
+                }
 
-        StreamReader sr = new StreamReader(m_sFilePath);
-        JsonSerializer serializer = new JsonSerializer();
-        List<DialogNode> nodes = (List<DialogNode>)serializer.Deserialize(new JsonTextReader(sr), typeof(List<DialogNode>));
-        m_arrDialogArr = nodes;
-        sr.Dispose();
+                StreamReader sr = new StreamReader(m_sFilePath);
+                JsonSerializer serializer = new JsonSerializer();
+                List<DialogNode> nodes = (List<DialogNode>)serializer.Deserialize(new JsonTextReader(sr), typeof(List<DialogNode>));
+                m_arrDialogArr = nodes;
+                sr.Dispose();
 
-#elif UNITY_ANDROID
-
-        //m_sFilePath = Application.dataPath + "!assets" + "/" + m_sFilePath; //安卓的读取那边的文件不需要这么写
-        string strJson = AndroidAssetLoadSDK.LoadTextFile(m_sFilePath);
-        //string strJson = AndroidLoadFileSDK.LoadTextFile(m_sFilePath);
-        List<DialogNode> nodes = JsonConvert.DeserializeObject<List<DialogNode>>(strJson);
-        m_arrDialogArr = nodes;
-
-#endif
+        #elif UNITY_ANDROID
+                //m_sFilePath = Application.dataPath + "!assets" + "/" + m_sFilePath; //安卓的读取那边的文件不需要这么写
+                string strJson = AndroidAssetLoadSDK.LoadTextFile(m_sFilePath);
+                //string strJson = AndroidLoadFileSDK.LoadTextFile(m_sFilePath);
+                List<DialogNode> nodes = JsonConvert.DeserializeObject<List<DialogNode>>(strJson);
+                m_arrDialogArr = nodes;
+        #endif
+        */
+        m_arrDialogArr = Completed.GameManager.LoadJsonConfigs<DialogNode>(m_sFilePath);
     }
 
     //下一段话

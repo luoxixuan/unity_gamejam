@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneDecorateItem : MonoBehaviour {
+public class SceneDecorateItem : MonoBehaviour
+{
 
     // 装饰后续List读取类型
     public enum DecorateType
@@ -13,13 +14,22 @@ public class SceneDecorateItem : MonoBehaviour {
         DecType_Talk,   // 触发对话
     }
 
+    public struct ItemEvent
+    {
+        DecorateType eventType;
+        string eventResult; //如果是获得物品的事件那就是物品id，如果是对话，暂时就是对话的名字，如果是物品落地之类的；
+    }
+
     public GameObject TouchItemPrefab;
-    public DecorateType m_eDecType; // 触发 List读取类型
+    public DecorateType m_eDecType; // 触发 List读取类型, 这样没法同时触发多个事件
+
+    private List<ItemEvent> m_eventList;
 
     public List<Sprite> m_lDecList;
     public bool m_bIsRepeat;    // 是否可重复触发
     public bool m_bNeedFall;    // 是否需要倒下
-    public string m_sDialogName;    // 如果是对话 对话名
+    public string m_sDialogName;// 如果是对话 
+    public int m_getItem;       // 如果可以获得物品 物品ID
 
     private SpriteRenderer m_spRenderer;
     private PolygonCollider2D m_collider;
@@ -30,8 +40,9 @@ public class SceneDecorateItem : MonoBehaviour {
 
     private bool isOnTrigger = false; //不是立即触发东西，加个状态标记下，当前有没有在屏幕上显示触发开关
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         m_spRenderer = this.GetComponent<SpriteRenderer>();
         m_collider = this.GetComponent<PolygonCollider2D>();
         if (null == TouchItemPrefab) //如果场景中预设了这边就不设置了
@@ -40,10 +51,11 @@ public class SceneDecorateItem : MonoBehaviour {
 
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
-	}
+
+    // Update is called once per frame
+    void Update()
+    {
+    }
 
     //这个可能会被外部对象调用
     public void doTrigger()
@@ -90,7 +102,8 @@ public class SceneDecorateItem : MonoBehaviour {
     }
 
     // 创建一个可以点击的叹号
-    private void createTouchItem() {
+    private void createTouchItem()
+    {
         if (null == m_touchItem)
         {
             m_touchItem = Instantiate(TouchItemPrefab);
@@ -103,7 +116,8 @@ public class SceneDecorateItem : MonoBehaviour {
         }
     }
 
-    private void destroyTouchItem() {
+    private void destroyTouchItem()
+    {
         if (m_touchItem)
         {
             GameObject.Destroy(m_touchItem);
@@ -119,10 +133,10 @@ public class SceneDecorateItem : MonoBehaviour {
         //Debug.Log("SceneDecorateItem::OnTriggerEnter2D: "+m_gColliderGo.name);
         if (m_bIsRepeat && !isOnTrigger) //可以重复触发的东西，再次进来的时候激活下，已经触发的就不再继续触发
             createTouchItem();
-            //doTrigger();
+        //doTrigger();
         if (!m_bIsRepeat && m_collider.isTrigger) //不能重复触发的东西，进来直接做动作
             doTrigger();
-            //createTouchItem();
+        //createTouchItem();
     }
 
     // 对话重复触发不知道怎么做=-=

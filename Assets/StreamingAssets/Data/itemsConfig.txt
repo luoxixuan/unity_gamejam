@@ -1,0 +1,18 @@
+[
+{
+    "itemID": 1,
+    "itemName": "钥匙"
+},
+{
+    "itemID": 2,
+    "itemName": "翻译机"
+},
+{
+    "itemID": 3,
+    "itemName": "照片碎片*3"
+},
+{
+    "itemID": 4,
+    "itemName": "怀表"
+}
+]
