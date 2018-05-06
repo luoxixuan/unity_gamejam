@@ -107,10 +107,10 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 948
-  m_MinSize: {x: 711, y: 542}
-  m_MaxSize: {x: 18006, y: 14042}
+  m_MinSize: {x: 713, y: 542}
+  m_MaxSize: {x: 18008, y: 14042}
   vertical: 0
-  controlID: 23733
+  controlID: 2150
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_MinSize: {x: 202, y: 542}
   m_MaxSize: {x: 4002, y: 12042}
   vertical: 1
-  controlID: 23796
+  controlID: 2286
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -236,7 +236,7 @@ MonoBehaviour:
   m_MinSize: {x: 234, y: 492}
   m_MaxSize: {x: 10004, y: 14042}
   vertical: 1
-  controlID: 23818
+  controlID: 2205
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -629,9 +629,9 @@ MonoBehaviour:
   m_PersistentViewDataDictionary: {fileID: 0}
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 
-    m_LastClickedID: 0
-    m_ExpandedIDs: 9cfbffff00000000ca2a0000a82b0000c02b0000
+    m_SelectedIDs: 1c2b0000
+    m_LastClickedID: 11036
+    m_ExpandedIDs: 9cfbffff00000000b22b0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -693,19 +693,19 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Resources/Prefabs
+    - Assets/Resources/palette
   m_ViewMode: 1
   m_StartGridSize: 96
   m_LastFolders:
-  - Assets/Resources/Prefabs
+  - Assets/Resources/palette
   m_LastFoldersGridSize: 96
   m_LastProjectPath: F:\CodeWork\unity_gamejam
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 462a0000
-    m_LastClickedID: 10822
-    m_ExpandedIDs: 000000007a290000c6290000da290000102d0000122d0000142d0000162d0000182d00001a2d000000ca9a3bffffff7f
+    m_SelectedIDs: c0290000
+    m_LastClickedID: 10688
+    m_ExpandedIDs: 000000008e290000da290000ee290000562c0000582c00005a2c00005c2c00005e2c0000602c000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -733,7 +733,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: c0350000
     m_LastClickedID: 13760
-    m_ExpandedIDs: 000000007a290000c6290000da290000102d0000122d0000142d0000162d0000182d00001a2d000000ca9a3bffffff7f
+    m_ExpandedIDs: 000000008e290000da290000ee290000562c0000582c00005a2c00005c2c00005e2c0000602c000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

@@ -24,7 +24,7 @@ namespace Completed
         [HideInInspector]
         public bool playerInDialog = false;   //Boolean to check if players is in dialog, hidden in inspector but public.
         [HideInInspector]
-        public bool doingSomething = false;   //Boolean to check if players is in dialog, hidden in inspector but public.
+        public bool doingSomething = false;   //Boolean to check if players is doSomething, hidden in inspector but public.
 
         private int level = 1;                                  //Current level number, expressed in game as "Day 1".
         private bool doingSetup = false;						//Boolean to check if we're setting up board, prevent Player from moving during setup.
