@@ -2,166 +2,211 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneDecorateItem : MonoBehaviour
+namespace GameJam
 {
-
-    // 装饰后续List读取类型
-    public enum DecorateType
+    public class SceneDecorateItem : MonoBehaviour
     {
-        DecType_None,   // 无
-        DecType_Random, // 在List中随机一个替换
-        DecType_Order,  // 按照List顺序依次替换
-        DecType_Talk,   // 触发对话
-    }
+        public GameObject TouchItemPrefab;
+        
+        public List<Sprite> m_lDecList; //
+        public bool m_bNeedFall;        // 是否需要倒下
 
-    public struct ItemEvent
-    {
-        DecorateType eventType;
-        string eventResult; //如果是获得物品的事件那就是物品id，如果是对话，暂时就是对话的名字，如果是物品落地之类的；
-    }
+        [Tooltip("物体能够触发的事件的id数组")]
+        public List<int> m_eventIDs = null;   //事件的id数组
 
-    public GameObject TouchItemPrefab;
-    public DecorateType m_eDecType; // 触发 List读取类型, 这样没法同时触发多个事件
+        private List<GameEvent> m_eventList = null; //可触发事件的列表,在运行时根据在unity编辑器里配置的IDs数组赋值
+        private SpriteRenderer m_spRenderer;
+        private PolygonCollider2D m_collider;
+        private Vector3 m_vEulerRotation;
 
-    private List<ItemEvent> m_eventList;
+        private GameObject m_gColliderGo;
+        private GameObject m_touchItem;
 
-    public List<Sprite> m_lDecList;
-    public bool m_bIsRepeat;    // 是否可重复触发
-    public bool m_bNeedFall;    // 是否需要倒下
-    public string m_sDialogName;// 如果是对话 
-    public int m_getItem;       // 如果可以获得物品 物品ID
+        private bool m_onTrigger = false; //不是立即触发东西，加个状态标记下，当前有没有在屏幕上显示触发开关
 
-    private SpriteRenderer m_spRenderer;
-    private PolygonCollider2D m_collider;
-    private Vector3 m_vEulerRotation;
-
-    private GameObject m_gColliderGo;
-    private GameObject m_touchItem;
-
-    private bool isOnTrigger = false; //不是立即触发东西，加个状态标记下，当前有没有在屏幕上显示触发开关
-
-    // Use this for initialization
-    void Start()
-    {
-        m_spRenderer = this.GetComponent<SpriteRenderer>();
-        m_collider = this.GetComponent<PolygonCollider2D>();
-        if (null == TouchItemPrefab) //如果场景中预设了这边就不设置了
+        // Use this for initialization
+        void Start()
         {
-            TouchItemPrefab = (GameObject)Resources.Load("Prefabs/TouchMe");
+            m_spRenderer = this.GetComponent<SpriteRenderer>();
+            m_collider = this.GetComponent<PolygonCollider2D>();
 
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-    //这个可能会被外部对象调用
-    public void doTrigger()
-    {
-        //Debug.Log("SceneDecorateItem::doTrigger: " + m_eDecType);
-        if (m_eDecType == DecorateType.DecType_Random)
-        {
-            if (null != m_lDecList && m_lDecList.Count > 0)
+            if (null == TouchItemPrefab) //如果场景中没有预设这边就用交互物品
             {
-                int randInt = Random.Range(0, m_lDecList.Count - 1);
-                m_spRenderer.sprite = m_lDecList[randInt];
-                if (true == m_bNeedFall)
+                TouchItemPrefab = (GameObject)Resources.Load("Prefabs/TouchMe");
+            }
+            m_eventList = new List<GameEvent>();
+            //添加事件，好像效率有点低，需要循环两个表
+            if (m_eventIDs != null)
+            {
+                foreach (int id in m_eventIDs)
                 {
-                    if (m_gColliderGo.transform.position.x <= transform.position.x)
+                    foreach (GameEvent e in GameConfig.instance.eventConfigs)
                     {
-                        m_vEulerRotation = this.transform.localEulerAngles;
-                        m_vEulerRotation.z = -90.0f;
-                        this.transform.localEulerAngles = m_vEulerRotation;
+                        if (e.eventID == id)
+                        {
+                            m_eventList.Add(e);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+        }
+
+        public void doDecorateItemEvent() {
+            bool deleteEventTrigger = false;
+            if (null != m_eventList && m_eventList.Count > 0) {
+                for (int i = 0; i < m_eventList.Count; )
+                {
+                    GameEvent e = m_eventList[i];
+                    deleteEventTrigger = doEventTrigger(e);
+                    if (deleteEventTrigger)
+                    {
+                        m_eventList.Remove(e); //成功触发就删除这个事件
                     }
                     else
                     {
-                        m_vEulerRotation = this.transform.localEulerAngles;
-                        m_vEulerRotation.z = 90.0f;
-                        this.transform.localEulerAngles = m_vEulerRotation;
+                        i++;
                     }
+
                 }
-
-                m_collider.isTrigger = false;
             }
+
+            if (null != m_eventList && m_eventList.Count == 0) {
+                m_collider.isTrigger = true; //事件全部触发完成，标记置为true，后面就不再出交互的选项了
+            }
+            else
+                m_collider.isTrigger = false; //否则就是没有全部触发完
         }
-        else if (m_eDecType == DecorateType.DecType_Talk)
+
+        //加个返回值判断下事件触发了需不要删除
+        bool doEventTrigger(GameEvent gEvent)
         {
-            if (null == DialogManage.m_me)
+            bool deleteEventTrigger = true; //默认触发了就删掉, 除非触发失败或者事件可以多次触发
+            //如果有触发条件但是玩家没有对应的物品那就不触发
+            if (gEvent.eventTriger != 0 && !GameManager.instance.PlayHasItem(gEvent.eventTriger)) 
             {
-                return;
+                return false;
             }
-            if (null != m_sDialogName && m_sDialogName.Length > 0)
+
+            DecorateType eventType = gEvent.eventType;
+            //Debug.Log("SceneDecorateItem::doTrigger: " + m_eDecType);
+            if (eventType == DecorateType.DecType_Random)
             {
-                DialogManage.m_me.StartDialogByName(m_sDialogName);
+                if (null != m_lDecList && m_lDecList.Count > 0)
+                {
+                    int randInt = Random.Range(0, m_lDecList.Count - 1);
+                    m_spRenderer.sprite = m_lDecList[randInt];
+                    if (true == m_bNeedFall)
+                    {
+                        if (m_gColliderGo.transform.position.x <= transform.position.x)
+                        {
+                            m_vEulerRotation = this.transform.localEulerAngles;
+                            m_vEulerRotation.z = -90.0f;
+                            this.transform.localEulerAngles = m_vEulerRotation;
+                        }
+                        else
+                        {
+                            m_vEulerRotation = this.transform.localEulerAngles;
+                            m_vEulerRotation.z = 90.0f;
+                            this.transform.localEulerAngles = m_vEulerRotation;
+                        }
+                    }
+
+                }
             }
-            m_collider.isTrigger = false;
-        }
-        destroyTouchItem(); //用完就删，拔吊无情
-    }
-
-    // 创建一个可以点击的叹号
-    private void createTouchItem()
-    {
-        if (null == m_touchItem)
-        {
-            m_touchItem = Instantiate(TouchItemPrefab);
-            m_touchItem.transform.parent = gameObject.transform.parent;
-            m_touchItem.transform.position = gameObject.transform.position;
-            TouchItem touchItem = m_touchItem.GetComponent<TouchItem>();
-            touchItem.decorateItem = this;
-            isOnTrigger = true;
-            //Completed.GameManager.instance.playerInDialog = true; //干脆有东西就不让走好了。。
-        }
-    }
-
-    private void destroyTouchItem()
-    {
-        if (m_touchItem)
-        {
-            GameObject.Destroy(m_touchItem);
-            m_touchItem = null;
-            isOnTrigger = false; //销毁后把这个状态置空
-            //Completed.GameManager.instance.playerInDialog = false;
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        m_gColliderGo = collision.gameObject;
-        //Debug.Log("SceneDecorateItem::OnTriggerEnter2D: "+m_gColliderGo.name);
-        if (m_bIsRepeat && !isOnTrigger) //可以重复触发的东西，再次进来的时候激活下，已经触发的就不再继续触发
-            createTouchItem();
-        //doTrigger();
-        if (!m_bIsRepeat && m_collider.isTrigger) //不能重复触发的东西，进来直接做动作
-            doTrigger();
-        //createTouchItem();
-    }
-
-    // 对话重复触发不知道怎么做=-=
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        //Debug.Log("SceneDecorateItem::OnTriggerExit2D: " + m_gColliderGo.name);
-        destroyTouchItem();
-    }
-
-    // 碰撞时每帧检测
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        //Debug.Log("SceneDecorateItem::OnTriggerStay2D: " + m_gColliderGo.name);
-        if (isOnTrigger)
-        {
-            if (Input.GetKeyUp(KeyCode.Backspace))
+            else if (eventType == DecorateType.DecType_Talk)
             {
-                doTrigger(); //pc上也可以用键盘触发
+                if (null == DialogManage.m_me)
+                {
+                    return false;
+                }
+                else if (gEvent.eventResult > 0)
+                {
+                    DialogManage.m_me.StartDialogByID(gEvent.eventResult);
+                }
+            }
+            else if (eventType == DecorateType.DecType_GetItem)
+            {
+                if (null == GameManager.instance)
+                {
+                    return false;
+                }
+                else if (gEvent.eventResult > 0)
+                {
+                    GameManager.instance.AddItemToPlayer(gEvent.eventResult);
+                }
+            }
+            
+            destroyTouchItem();
+            if (deleteEventTrigger) {
+                deleteEventTrigger = gEvent.isRepeat == 0; //可以重复触发的事件不能删除，不能重复触发的触发完删除
+            }
+
+            return deleteEventTrigger;
+        }
+
+        // 创建一个可以点击的叹号
+        private void createTouchItem()
+        {
+            if (null == m_touchItem && m_eventList != null && m_eventList.Count > 0)
+            {
+                m_touchItem = Instantiate(TouchItemPrefab);
+                m_touchItem.transform.parent = gameObject.transform.parent;
+                m_touchItem.transform.position = gameObject.transform.position;
+                TouchItem touchItem = m_touchItem.GetComponent<TouchItem>();
+                touchItem.decorateItem = this;
+                m_onTrigger = true;
+                //Completed.GameManager.instance.playerInDialog = true; //干脆有东西就不让走好了。。
             }
         }
-    }
 
-    // 设置Trigger
-    public void SetTrigger(bool value)
-    {
-        m_collider.isTrigger = value;
+        private void destroyTouchItem()
+        {
+            if (m_touchItem)
+            {
+                GameObject.Destroy(m_touchItem);
+                m_touchItem = null;
+                m_onTrigger = false; //销毁后把这个状态置空
+                //Completed.GameManager.instance.playerInDialog = false;
+            }
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            m_gColliderGo = collision.gameObject;
+            //Debug.Log("SceneDecorateItem::OnTriggerEnter2D: "+m_gColliderGo.name);
+            if (!m_onTrigger) //可以重复触发的东西，再次进来的时候激活下，已经触发的就不再继续触发
+                createTouchItem();
+        }
+
+        // 出去之后销毁
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            //Debug.Log("SceneDecorateItem::OnTriggerExit2D: " + m_gColliderGo.name);
+            destroyTouchItem();
+        }
+
+        // 碰撞时每帧检测
+        private void OnTriggerStay2D(Collider2D collision)
+        {
+            //Debug.Log("SceneDecorateItem::OnTriggerStay2D: " + m_gColliderGo.name);
+            if (m_onTrigger)
+            {
+                if (Input.GetKeyUp(KeyCode.Backspace))
+                {
+                    doDecorateItemEvent(); //pc上也可以用键盘触发
+                }
+            }
+        }
+
+        // 设置Trigger
+        public void SetTrigger(bool value)
+        {
+            m_collider.isTrigger = value;
+        }
     }
 }

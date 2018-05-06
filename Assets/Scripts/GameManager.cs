@@ -1,18 +1,10 @@
 ﻿using System.Collections;
-using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Newtonsoft.Json;
 
-namespace Completed
+namespace GameJam
 {
     using System.Collections.Generic;		//Allows us to use Lists. 
-
-    struct PlayerItem
-    {
-        public int itemID { get; set; }
-        public string itemName { get; set; }
-    }
 
     public class GameManager : MonoBehaviour
     {
@@ -29,37 +21,9 @@ namespace Completed
         private int level = 1;                                  //Current level number, expressed in game as "Day 1".
         private bool doingSetup = false;						//Boolean to check if we're setting up board, prevent Player from moving during setup.
 
-        private List<PlayerItem> m_allItems;                      //All items, load from config.
-        private List<PlayerItem> m_playersItems;                  //player's items.
-
-        private string m_itemsConfigPath = "Data/itemsConfig.txt";
-
-        // 一个模板函数，用来加载放在Assets\StreamingAssets\Data目录下的json配置
-        public static List<T> LoadJsonConfigs<T>(string configPath)
-        {
-            List<T> configItems = null;
-
-#if UNITY_STANDALONE || UNITY_IPHONE
-            configPath = Application.streamingAssetsPath + "/" + configPath;
-            if (false == File.Exists(configPath))
-            {
-                Debug.Log("DialogManage::LoadDialogs File Not Exists! " + configPath);
-                return null;
-            }
-
-            StreamReader sr = new StreamReader(configPath);
-            JsonSerializer serializer = new JsonSerializer();
-            List<T> nodes = (List<T>)serializer.Deserialize(new JsonTextReader(sr), typeof(List<T>));
-            configItems = nodes;
-            sr.Dispose();
-#elif UNITY_ANDROID
-            string strJson = AndroidAssetLoadSDK.LoadTextFile(configPath);
-            List<T> nodes = JsonConvert.DeserializeObject<List<T>>(strJson);
-            configItems = nodes;
-#endif
-
-            return configItems;
-        }
+        private List<GameItem> m_allItems;                      //All items, load from config.
+        private List<GameItem> m_playersItems;                  //player's items.
+        
 
         //Awake is always called before any Start functions
         void Awake()
@@ -102,7 +66,7 @@ namespace Completed
 
         void loadGameConfig()
         {
-            m_allItems = LoadJsonConfigs<PlayerItem>(m_itemsConfigPath);
+            m_allItems = GameConfig.instance.itemConfigs;
         }
 
         //Initializes the game for each level.
@@ -110,7 +74,7 @@ namespace Completed
         {
             loadGameConfig();
 
-
+            m_playersItems = new List<GameItem>();
         }
 
         //Update is called every frame.
@@ -126,22 +90,23 @@ namespace Completed
             StartCoroutine(DoSomeThing());
         }
 
-        void AddItemToPlayer(int itemID)
+        public void AddItemToPlayer(int itemID)
         {
-            foreach (PlayerItem item in m_allItems)
+            foreach (GameItem item in m_allItems)
             {
                 if (item.itemID == itemID)
                 {
                     m_playersItems.Add(item);
+                    Debug.Log("获得物品：" + item.itemName);
                     break;
                 }
             }
         }
 
-        bool PlayHasItem(int itemID)
+        public bool PlayHasItem(int itemID)
         {
             bool flag = false;
-            foreach (PlayerItem item in m_playersItems)
+            foreach (GameItem item in m_playersItems)
             {
                 if (item.itemID == itemID)
                 {

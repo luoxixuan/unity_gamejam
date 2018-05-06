@@ -281,6 +281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c23d8039e659d46a7b71f4f3c0b02486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameConfgs: {fileID: 1237666897206378, guid: 7816da541248e644c9ca4c9e2ef14d08, type: 2}
   gameManager: {fileID: 133658, guid: 1ca8c6e960c494bbd937610290f80d1b, type: 2}
   soundManager: {fileID: 109316, guid: 76cd81135280f4ad6a4fa80f6422aea2, type: 2}
 --- !u!114 &258564001
@@ -448,13 +449,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TouchItemPrefab: {fileID: 1152627832074504, guid: 2b671c8b9d4c75443b623aa41cb61843,
     type: 2}
-  m_eDecType: 1
   m_lDecList:
   - {fileID: 21300002, guid: 9b957cbc257760b49a790f4afb810a09, type: 3}
-  m_bIsRepeat: 0
   m_bNeedFall: 1
-  m_sDialogName: 
-  m_getItem: 0
+  m_eventIDs: 01000000
 --- !u!212 &301441615
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3793,12 +3791,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TouchItemPrefab: {fileID: 0}
-  m_eDecType: 3
   m_lDecList: []
-  m_bIsRepeat: 1
   m_bNeedFall: 0
-  m_sDialogName: test2
-  m_getItem: 0
+  m_eventIDs: 0400000005000000
 --- !u!1 &1348925380
 GameObject:
   m_ObjectHideFlags: 0
@@ -3917,13 +3912,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TouchItemPrefab: {fileID: 0}
-  m_eDecType: 1
   m_lDecList:
   - {fileID: 21300008, guid: 9b957cbc257760b49a790f4afb810a09, type: 3}
-  m_bIsRepeat: 0
   m_bNeedFall: 0
-  m_sDialogName: 
-  m_getItem: 0
+  m_eventIDs: 0200000003000000
 --- !u!1 &1385685835
 GameObject:
   m_ObjectHideFlags: 0
@@ -4196,13 +4188,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TouchItemPrefab: {fileID: 0}
-  m_eDecType: 1
   m_lDecList:
   - {fileID: 21300002, guid: 9b957cbc257760b49a790f4afb810a09, type: 3}
-  m_bIsRepeat: 0
   m_bNeedFall: 1
-  m_sDialogName: 
-  m_getItem: 0
+  m_eventIDs: 
 --- !u!1 &1651095995
 GameObject:
   m_ObjectHideFlags: 0
@@ -4708,12 +4697,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TouchItemPrefab: {fileID: 0}
-  m_eDecType: 3
   m_lDecList: []
-  m_bIsRepeat: 1
   m_bNeedFall: 0
-  m_sDialogName: test1
-  m_getItem: 0
+  m_eventIDs: 
 --- !u!60 &1883783883
 PolygonCollider2D:
   m_ObjectHideFlags: 0

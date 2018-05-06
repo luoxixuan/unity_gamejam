@@ -1,5 +1,6 @@
 [
 {
+	"DialogID":1,
     "DialogName": "test1",
     "DialogArr": [
         {
@@ -20,22 +21,49 @@
     ]
 },
 {
+	"DialogID":2,
     "DialogName": "test2",
     "DialogArr": [
         {
             "Name": "哼哼",
             "IconPath": "Sprites/icon1",
-            "DialogText": "哇！哈哈！哈哈你怎么了！"
+            "DialogText": "这地上好像有个钥匙"
         },
         {
             "Name": "哈哈",
             "IconPath": "Sprites/icon2",
-            "DialogText": "..."
+            "DialogText": "捡起来看看"
         },
         {
             "Name": "哈哈",
             "IconPath": "Sprites/icon2",
-            "DialogText": "我被邪王真眼喵给爆裂了！"
+            "DialogText": "你获得了物品：钥匙"
+        }
+    ]
+},
+{
+	"DialogID":3,
+    "DialogName": "test3",
+    "DialogArr": [
+        {
+            "Name": "猫",
+            "IconPath": "Sprites/icon1",
+            "DialogText": "你有钥匙吗？"
+        },
+        {
+            "Name": "哈哈",
+            "IconPath": "Sprites/icon2",
+            "DialogText": "我这有把钥匙"
+        },
+        {
+            "Name": "猫",
+            "IconPath": "Sprites/icon2",
+            "DialogText": "诺这是你的怀表，拨动它的指针你就可以回到过去了"
+        },
+        {
+            "Name": "哈哈",
+            "IconPath": "Sprites/icon1",
+            "DialogText": "你获得了物品：怀表"
         }
     ]
 }

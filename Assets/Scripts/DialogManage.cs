@@ -1,175 +1,138 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
-using Newtonsoft.Json;
 
-public class DialogManage : MonoBehaviour {
-    [System.Serializable]
-    public class DialogItem
+namespace GameJam
+{
+    public class DialogManage : MonoBehaviour
     {
-        public string Name { get; set; }
-        public string DialogText { get; set; }
-        public string IconPath { get; set; }
-    }
+        public static DialogManage m_me;
+        private bool m_bIsStartDialog;              // 是否开始对话
+        private List<DialogNode> m_arrDialogArr;    // 对话List
+        private DialogNode m_curDialogNode;         // 当前对话Node
+        private int m_iCurDialogItemIndex;          // 当前对话Item索引
 
-    [System.Serializable]
-    public class DialogNode
-    {
-        public string DialogName { get; set; }
-        //public DialogItem[] DialogArr { get; set; }
-        public List<DialogItem> DialogArr { get; set; }
-    }
-    public static DialogManage m_me;
+        private Text m_tTalkText;
+        private Image m_imgIconImage;
 
-
-    private string m_sFilePath = "Data/dialogText.txt"; //对话的配置文件路径,这个还是不要弄成public的了，不然代码里改了在编辑器里总是要reset脚本才生效
-    private bool m_bIsStartDialog;  // 是否开始对话
-    //private DialogNode[] m_arrDialogArr;    // 对话List
-    private List<DialogNode> m_arrDialogArr;    // 对话List
-    private DialogNode m_curDialogNode; // 当前对话Node
-    private int m_iCurDialogItemIndex;  // 当前对话Item索引
-
-    private Text m_tTalkText;
-    private Image m_imgIconImage;
-
-    // Use this for initialization
-    void Start () {
-        m_me = this;
-        m_tTalkText = transform.Find("TalkText").GetComponent<Text>();
-        m_imgIconImage = transform.Find("IconImage").GetComponent<Image>();
-        LoadDialogs();
-
-        gameObject.SetActive(false);
-        m_bIsStartDialog = false;
-    }
-
-    public void clickToNextDialog() {
-        nextDialog();
-    }
-
-    private void LoadDialogs()
-    {
-        /*
-        #if UNITY_STANDALONE || UNITY_IPHONE
-
-                m_sFilePath = Application.streamingAssetsPath + "/" + m_sFilePath;
-                if (false == File.Exists(m_sFilePath))
-                {
-                    Debug.Log("DialogManage::LoadDialogs File Not Exists! " + m_sFilePath);
-                    return;
-                }
-
-                StreamReader sr = new StreamReader(m_sFilePath);
-                JsonSerializer serializer = new JsonSerializer();
-                List<DialogNode> nodes = (List<DialogNode>)serializer.Deserialize(new JsonTextReader(sr), typeof(List<DialogNode>));
-                m_arrDialogArr = nodes;
-                sr.Dispose();
-
-        #elif UNITY_ANDROID
-                //m_sFilePath = Application.dataPath + "!assets" + "/" + m_sFilePath; //安卓的读取那边的文件不需要这么写
-                string strJson = AndroidAssetLoadSDK.LoadTextFile(m_sFilePath);
-                //string strJson = AndroidLoadFileSDK.LoadTextFile(m_sFilePath);
-                List<DialogNode> nodes = JsonConvert.DeserializeObject<List<DialogNode>>(strJson);
-                m_arrDialogArr = nodes;
-        #endif
-        */
-        m_arrDialogArr = Completed.GameManager.LoadJsonConfigs<DialogNode>(m_sFilePath);
-    }
-
-    //下一段话
-    private void nextDialog() {
-        // 开始对话
-        if (true == m_bIsStartDialog)
+        // Use this for initialization
+        void Start()
         {
-            // 有下一对话
-            if (m_iCurDialogItemIndex < m_curDialogNode.DialogArr.Count)
-            {
-                ShowDialogText(m_curDialogNode.DialogArr[m_iCurDialogItemIndex]);
-            }
-            else
-            {
-                EndDialog();
-            }
-        }
-    }
+            m_me = this;
+            m_tTalkText = transform.Find("TalkText").GetComponent<Text>();
+            m_imgIconImage = transform.Find("IconImage").GetComponent<Image>();
+            LoadDialogs();
 
-	// Update is called once per frame
-    // TODO 对话触发时应该剥夺人物行动能力
-	void Update () {
-        // 暂时做的键盘
-        if (Input.GetKeyUp(KeyCode.Space))
+            gameObject.SetActive(false);
+            m_bIsStartDialog = false;
+        }
+
+        public void clickToNextDialog()
         {
             nextDialog();
         }
-    }
 
-    // 根据名称 获取对话Node
-    public DialogNode GetDialogNodeByName(string name)
-    {
-        //Debug.Log("DialogManage::GetDialogNodeByName: " + name);
-        if (null != name && null != m_arrDialogArr)
+        private void LoadDialogs()
         {
-            for(int i = 0; i < m_arrDialogArr.Count; i++)
+            m_arrDialogArr = GameConfig.instance.dialogConfigs;
+        }
+
+        //下一段话
+        private void nextDialog()
+        {
+            // 开始对话
+            if (true == m_bIsStartDialog)
             {
-                //Debug.Log("DialogManage::GetDialogNodeByName遍历输出json对话名字：" + m_arrDialogArr[i].DialogName);
-                if (m_arrDialogArr[i].DialogName == name)
+                // 有下一对话
+                if (m_iCurDialogItemIndex < m_curDialogNode.DialogArr.Count)
                 {
-                    //Debug.Log("DialogManage::GetDialogNodeByName: 取到了对话内容，第一句话是" + m_arrDialogArr[i].DialogArr[0].DialogText);
-                    return m_arrDialogArr[i];
+                    ShowDialogText(m_curDialogNode.DialogArr[m_iCurDialogItemIndex]);
+                }
+                else
+                {
+                    EndDialog();
                 }
             }
         }
-        return null;
-    }
 
-    // 根据名称 开始对话
-    public void StartDialogByName(string name)
-    {
-        //Debug.Log("DialogManage::StartDialogByName：" + name);
-        DialogNode tempNode = GetDialogNodeByName(name);
-        if(null == tempNode)
+        // Update is called once per frame
+        // TODO 对话触发时应该剥夺人物行动能力
+        void Update()
         {
-            //Debug.Log("DialogManage::StartDialogByName：" + name + " tempNode is null");
-            return;
+            // 暂时做的键盘
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                nextDialog();
+            }
         }
 
-        if(null == tempNode.DialogArr || tempNode.DialogArr.Count <= 0)
+        // 根据名称 获取对话Node
+        public DialogNode GetDialogNodeByID(int dialogID)
         {
-            //Debug.Log("DialogManage::StartDialogByName：" + name + " tempNode.DialogArr is no string");
-            return;
+            //Debug.Log("DialogManage::GetDialogNodeByName: " + name);
+            if (dialogID != 0 && null != m_arrDialogArr)
+            {
+                for (int i = 0; i < m_arrDialogArr.Count; i++)
+                {
+                    //Debug.Log("DialogManage::GetDialogNodeByName遍历输出json对话名字：" + m_arrDialogArr[i].DialogName);
+                    if (m_arrDialogArr[i].DialogID == dialogID)
+                    {
+                        //Debug.Log("DialogManage::GetDialogNodeByName: 取到了对话内容，第一句话是" + m_arrDialogArr[i].DialogArr[0].DialogText);
+                        return m_arrDialogArr[i];
+                    }
+                }
+            }
+            return null;
         }
 
-        gameObject.SetActive(true);
-        m_curDialogNode = tempNode;
-        m_iCurDialogItemIndex = 0;
-        ShowDialogText(tempNode.DialogArr[m_iCurDialogItemIndex]);
-        m_bIsStartDialog = true;
+        // 根据名称 开始对话
+        public void StartDialogByID(int dialogID)
+        {
+            //Debug.Log("DialogManage::StartDialogByName：" + name);
+            DialogNode tempNode = GetDialogNodeByID(dialogID);
+            if (null == tempNode)
+            {
+                //Debug.Log("DialogManage::StartDialogByName：" + name + " tempNode is null");
+                return;
+            }
 
-        //开始对话，角色不能移动
-        Completed.GameManager.instance.playerInDialog = true;
-    }
+            if (null == tempNode.DialogArr || tempNode.DialogArr.Count <= 0)
+            {
+                //Debug.Log("DialogManage::StartDialogByName：" + name + " tempNode.DialogArr is no string");
+                return;
+            }
 
-    public void EndDialog()
-    {
-        m_bIsStartDialog = false;
-        m_iCurDialogItemIndex = 0;
-        m_curDialogNode = null;
-        gameObject.SetActive(false);
+            gameObject.SetActive(true);
+            m_curDialogNode = tempNode;
+            m_iCurDialogItemIndex = 0;
+            ShowDialogText(tempNode.DialogArr[m_iCurDialogItemIndex]);
+            m_bIsStartDialog = true;
 
-        //结束对话
-        Completed.GameManager.instance.playerInDialog = false;
-        //Debug.Log("DialogManage::EndDialog");
-    }
+            //开始对话，角色不能移动
+            GameManager.instance.playerInDialog = true;
+        }
 
-    // 显示单个对话Item
-    public void ShowDialogText(DialogItem item)
-    {
-        m_tTalkText.text = item.Name + " : " + item.DialogText;
-        Sprite sp = Resources.Load<Sprite>(item.IconPath);
-        m_imgIconImage.sprite = sp;
+        public void EndDialog()
+        {
+            m_bIsStartDialog = false;
+            m_iCurDialogItemIndex = 0;
+            m_curDialogNode = null;
+            gameObject.SetActive(false);
 
-        m_iCurDialogItemIndex++;
+            //结束对话
+            GameManager.instance.playerInDialog = false;
+            //Debug.Log("DialogManage::EndDialog");
+        }
+
+        // 显示单个对话Item
+        public void ShowDialogText(DialogItem item)
+        {
+            m_tTalkText.text = item.Name + " : " + item.DialogText;
+            Sprite sp = Resources.Load<Sprite>(item.IconPath);
+            m_imgIconImage.sprite = sp;
+
+            m_iCurDialogItemIndex++;
+        }
     }
 }

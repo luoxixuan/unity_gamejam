@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Completed
+namespace GameJam
 {
     public class Wall : MonoBehaviour
     {
