@@ -1,70 +1,128 @@
 [
 {
 	"DialogID":1,
-    "DialogName": "test1",
+    "DialogName": "钟表对话",
     "DialogArr": [
         {
-            "Name": "哼哼",
-            "IconPath": "Sprites/icon1",
-            "DialogText": "哇！好多血！"
-        },
-        {
-            "Name": "哼哼",
-            "IconPath": "Sprites/icon1",
-            "DialogText": "..."
-        },
-        {
-            "Name": "哼哼",
-            "IconPath": "Sprites/icon1",
-            "DialogText": "哈哈可不能出事啊！"
+            "Name": "我",
+            "IconPath": "Sprites/head",
+            "DialogText": "除了提醒时间，好像别无他用"
         }
     ]
 },
 {
 	"DialogID":2,
-    "DialogName": "test2",
+    "DialogName": "书柜获得钥匙对话",
     "DialogArr": [
         {
-            "Name": "哼哼",
-            "IconPath": "Sprites/icon1",
-            "DialogText": "这地上好像有个钥匙"
+            "Name": "我",
+            "IconPath": "Sprites/head",
+            "DialogText": "书架有点乱，整理一下吧"
         },
         {
-            "Name": "哈哈",
-            "IconPath": "Sprites/icon2",
-            "DialogText": "捡起来看看"
-        },
-        {
-            "Name": "哈哈",
-            "IconPath": "Sprites/icon2",
-            "DialogText": "你获得了物品：钥匙"
+            "Name": "我",
+            "IconPath": "Sprites/head",
+            "DialogText": "获得【钥匙】"
         }
     ]
 },
 {
 	"DialogID":3,
-    "DialogName": "test3",
+    "DialogName": "床头柜没钥匙对话",
     "DialogArr": [
         {
-            "Name": "猫",
-            "IconPath": "Sprites/icon1",
-            "DialogText": "你有钥匙吗？"
-        },
-        {
-            "Name": "哈哈",
-            "IconPath": "Sprites/icon2",
-            "DialogText": "我这有把钥匙"
-        },
-        {
-            "Name": "猫",
-            "IconPath": "Sprites/icon2",
-            "DialogText": "诺这是你的怀表，拨动它的指针你就可以回到过去了"
-        },
-        {
-            "Name": "哈哈",
-            "IconPath": "Sprites/icon1",
-            "DialogText": "你获得了物品：怀表"
+            "Name": "我",
+            "IconPath": "Sprites/head",
+            "DialogText": "好像需要一把钥匙"
         }
+    ]
+},
+{
+	"DialogID":4,
+    "DialogName": "床头柜有钥匙获得翻译机对话",
+    "DialogArr": [
+        {
+            "Name": "我",
+            "IconPath": "Sprites/head",
+            "DialogText": "开启并获得【翻译机】"
+        }
+    ]
+},
+{
+	"DialogID":5,
+    "DialogName": "照片没照片碎片对话",
+    "DialogArr": [
+        {
+            "Name": "我",
+            "IconPath": "Sprites/head",
+            "DialogText": "上面好像缺了什么"
+        }
+    ]
+},
+{
+	"DialogID":6,
+    "DialogName": "照片有照片碎片对话",
+    "DialogArr": [
+        {
+            "Name": "我",
+            "IconPath": "Sprites/head",
+            "DialogText": "照片向上移。露出【怀表】"
+        }
+    ]
+},
+{
+	"DialogID":7,
+    "DialogName": "花瓶获得照片碎片对话",
+    "DialogArr": [
+        {
+            "Name": "我",
+            "IconPath": "Sprites/head",
+            "DialogText": "解开花瓶纹路上的谜题，获得【照片碎片】"
+        }
+    ]
+},
+{
+	"DialogID":8,
+    "DialogName": "血迹对话",
+    "DialogArr": [
+        {
+            "Name": "我",
+            "IconPath": "Sprites/head",
+            "DialogText": "“好像暗示了什么。”"
+        }
+    ]
+},
+{
+	"DialogID":9,
+    "DialogName": "黑猫没有翻译机对话",
+    "DialogArr": [
+        {
+            "Name": "黑猫",
+            "IconPath": "Sprites/cat",
+            "DialogText": "“喵……喵……”（暂时还听不懂它的话。）"
+        }
+    ]
+},
+{
+	"DialogID":10,
+    "DialogName": "有怀表对话",
+    "DialogArr": [
+        {
+            "Name": "黑猫",
+            "IconPath": "Sprites/cat",
+            "DialogText": "“你已经死掉了哦，如果找到怀表给我...”"
+        },
+        {
+            "Name": "黑猫",
+            "IconPath": "Sprites/cat",
+            "DialogText": "“哦，你已经找到了吗？我会送你到三小时以前”"
+        },
+        {
+            "Name": "黑猫",
+            "IconPath": "Sprites/cat",
+            "DialogText": "“给你重来一次的机会。”"
+        }
+
     ]
 }
 ]

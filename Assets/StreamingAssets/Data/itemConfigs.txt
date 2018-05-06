@@ -9,10 +9,14 @@
 },
 {
     "itemID": 3,
-    "itemName": "照片碎片*3"
+    "itemName": "照片"
 },
 {
     "itemID": 4,
     "itemName": "怀表"
+},
+{
+    "itemID": 5,
+    "itemName": "照片碎片"
 }
 ]

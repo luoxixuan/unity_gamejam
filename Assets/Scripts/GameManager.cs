@@ -106,6 +106,7 @@ namespace GameJam
         public bool PlayHasItem(int itemID)
         {
             bool flag = false;
+            //待改进，后面重构下，用find来搜索
             foreach (GameItem item in m_playersItems)
             {
                 if (item.itemID == itemID)

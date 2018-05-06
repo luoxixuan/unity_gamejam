@@ -15,6 +15,7 @@ namespace GameJam
         public List<int> m_eventIDs = null;   //事件的id数组
 
         private List<GameEvent> m_eventList = null; //可触发事件的列表,在运行时根据在unity编辑器里配置的IDs数组赋值
+        //private int m_eventCanTriggerCount = 0; //当前状态可触发的事件数量,用于判断要不要出交互item
         private SpriteRenderer m_spRenderer;
         private PolygonCollider2D m_collider;
         private Vector3 m_vEulerRotation;
@@ -44,11 +45,13 @@ namespace GameJam
                     {
                         if (e.eventID == id)
                         {
+                            
                             m_eventList.Add(e);
                         }
                     }
                 }
             }
+            //m_eventCanTriggerCount = m_eventList.Count; //游戏最开始不知道有几个能触发。。
         }
 
         // Update is called once per frame
@@ -58,6 +61,7 @@ namespace GameJam
 
         public void doDecorateItemEvent() {
             bool deleteEventTrigger = false;
+            //m_eventCanTriggerCount = m_eventList.Count;
             if (null != m_eventList && m_eventList.Count > 0) {
                 for (int i = 0; i < m_eventList.Count; )
                 {
@@ -65,7 +69,7 @@ namespace GameJam
                     deleteEventTrigger = doEventTrigger(e);
                     if (deleteEventTrigger)
                     {
-                        m_eventList.Remove(e); //成功触发就删除这个事件
+                        m_eventList.Remove(e); //需要删除的事件
                     }
                     else
                     {
@@ -75,24 +79,24 @@ namespace GameJam
                 }
             }
 
-            if (null != m_eventList && m_eventList.Count == 0) {
-                m_collider.isTrigger = true; //事件全部触发完成，标记置为true，后面就不再出交互的选项了
-            }
-            else
-                m_collider.isTrigger = false; //否则就是没有全部触发完
+            
         }
 
         //加个返回值判断下事件触发了需不要删除
         bool doEventTrigger(GameEvent gEvent)
         {
             bool deleteEventTrigger = true; //默认触发了就删掉, 除非触发失败或者事件可以多次触发
-            //如果有触发条件但是玩家没有对应的物品那就不触发
-            if (gEvent.eventTriger != 0 && !GameManager.instance.PlayHasItem(gEvent.eventTriger)) 
+            //如果有触发条件但是玩家对应的物品状态不符合那就不触发
+            if (gEvent.eventTriger > 0 && !GameManager.instance.PlayHasItem(gEvent.eventTriger)) //大于0表示需要这个物品才能触发
+            {
+                return false;
+            }
+            else if (gEvent.eventTriger < 0 && GameManager.instance.PlayHasItem(-gEvent.eventTriger)) //小于0表示没有这物品才能触发
             {
                 return false;
             }
 
-            DecorateType eventType = gEvent.eventType;
+                DecorateType eventType = gEvent.eventType;
             //Debug.Log("SceneDecorateItem::doTrigger: " + m_eDecType);
             if (eventType == DecorateType.DecType_Random)
             {
@@ -140,7 +144,18 @@ namespace GameJam
                     GameManager.instance.AddItemToPlayer(gEvent.eventResult);
                 }
             }
-            
+            else if (eventType == DecorateType.DecType_GameOver)
+            {
+                if (null == GameManager.instance)
+                {
+                    return false;
+                }
+                else if (gEvent.eventResult > 0)
+                {
+                    //GameManager.instance.enabled = false;
+                }
+            }
+
             destroyTouchItem();
             if (deleteEventTrigger) {
                 deleteEventTrigger = gEvent.isRepeat == 0; //可以重复触发的事件不能删除，不能重复触发的触发完删除
@@ -160,7 +175,6 @@ namespace GameJam
                 TouchItem touchItem = m_touchItem.GetComponent<TouchItem>();
                 touchItem.decorateItem = this;
                 m_onTrigger = true;
-                //Completed.GameManager.instance.playerInDialog = true; //干脆有东西就不让走好了。。
             }
         }
 
@@ -171,7 +185,6 @@ namespace GameJam
                 GameObject.Destroy(m_touchItem);
                 m_touchItem = null;
                 m_onTrigger = false; //销毁后把这个状态置空
-                //Completed.GameManager.instance.playerInDialog = false;
             }
         }
 

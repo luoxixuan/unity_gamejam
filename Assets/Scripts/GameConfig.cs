@@ -14,6 +14,7 @@ namespace GameJam
         DecType_Order,  // 按照List顺序依次替换
         DecType_Talk,   // 触发对话
         DecType_GetItem,// 获得物品
+        DecType_GameOver,// 游戏结束
     }
 
     // 事件
@@ -22,9 +23,10 @@ namespace GameJam
     {
         public int eventID { get; set; }           //事件id
         public DecorateType eventType { get; set; } //事件类型：0无，1随机倒地，2顺序，3触发对话，4获得物品
-        public int eventTriger { get; set; }        //触发事件的前置条件，暂时就是物品id吧，0就是没条件
+        public int eventTriger { get; set; }     //触发事件的前置条件，暂时就是物品id吧，0就是没条件，大于0的id表示有这个物品才能触发，小于0的表示没有这物品才能触发
         public int eventResult { get; set; }     //如果是获得物品的事件那就是物品id，如果是对话，暂时就是对话的名字，如果是物品落地之类的；
-        public int isRepeat { get; set; }           //0不能重复触发，1可以重复触发；
+        public int isRepeat { get; set; }        //0不能重复触发，1可以重复触发；
+        public int canTrigger { get; set; }      //0当前游戏状态不能触发，1可以触发，这个状态在配置里就配成1就行
     }
 
     //物品

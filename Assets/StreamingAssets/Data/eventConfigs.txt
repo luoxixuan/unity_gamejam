@@ -4,34 +4,134 @@
     "eventType": 3,
     "eventTriger": 0,
     "eventResult": 1,
-    "isRepeat": 1
+    "isRepeat": 1,
+    "canTrigger": 1,
+    "eventName": "钟表对话"
 },
 {
     "eventID": 2,
     "eventType": 3,
     "eventTriger": 0,
     "eventResult": 2,
-    "isRepeat": 0
+    "isRepeat": 0,
+    "canTrigger": 1,
+    "eventName": "整理书架获得钥匙对话"
 },
 {
     "eventID": 3,
     "eventType": 4,
     "eventTriger": 0,
     "eventResult": 1,
-    "isRepeat": 0
+    "isRepeat": 0,
+    "canTrigger": 1,
+    "eventName": "整理书架获得钥匙"
 },
 {
     "eventID": 4,
     "eventType": 3,
-    "eventTriger": 1,
+    "eventTriger": -1,
     "eventResult": 3,
-    "isRepeat": 0
+    "isRepeat": 1,
+    "canTrigger": 1,
+    "eventName": "床头柜没钥匙对话"
 },
 {
     "eventID": 5,
-    "eventType": 4,
+    "eventType": 3,
     "eventTriger": 1,
     "eventResult": 4,
-    "isRepeat": 0
+    "isRepeat": 0,
+    "canTrigger": 1,
+    "eventName": "床头柜有钥匙获得翻译机对话"
+},
+{
+    "eventID": 6,
+    "eventType": 4,
+    "eventTriger": 1,
+    "eventResult": 2,
+    "isRepeat": 0,
+    "canTrigger": 1,
+    "eventName": "床头柜获得翻译机"
+},
+{
+    "eventID": 7,
+    "eventType": 3,
+    "eventTriger": -5,
+    "eventResult": 5,
+    "isRepeat": 1,
+    "canTrigger": 1,
+    "eventName": "照片没有碎片对话"
+},
+{
+    "eventID": 8,
+    "eventType": 3,
+    "eventTriger": 5,
+    "eventResult": 6,
+    "isRepeat": 0,
+    "canTrigger": 1,
+    "eventName": "照片有碎片获得怀表对话"
+},
+{
+    "eventID": 9,
+    "eventType": 4,
+    "eventTriger": 5,
+    "eventResult": 4,
+    "isRepeat": 0,
+    "canTrigger": 1,
+    "eventName": "获得怀表"
+},
+{
+    "eventID": 10,
+    "eventType": 3,
+    "eventTriger": -2,
+    "eventResult": 9,
+    "isRepeat": 1,
+    "canTrigger": 1,
+    "eventName": "黑猫没有翻译机对话"
+},
+{
+    "eventID": 11,
+    "eventType": 3,
+    "eventTriger": 2,
+    "eventResult": 10,
+    "isRepeat": 1,
+    "canTrigger": 1,
+    "eventName": "黑猫有翻译机对话"
+},
+{
+    "eventID": 12,
+    "eventType": 3,
+    "eventTriger": 4,
+    "eventResult": 10,
+    "isRepeat": 0,
+    "canTrigger": 1,
+    "eventName": "黑猫有怀表对话"
+},
+{
+    "eventID": 13,
+    "eventType": 5,
+    "eventTriger": 4,
+    "eventResult": 1,
+    "isRepeat": 0,
+    "canTrigger": 1,
+    "eventName": "游戏暂时胜利"
+},
+{
+    "eventID": 14,
+    "eventType": 3,
+    "eventTriger": 0,
+    "eventResult": 7,
+    "isRepeat": 0,
+    "canTrigger": 1,
+    "eventName": "花瓶对话"
+},
+{
+    "eventID": 15,
+    "eventType": 4,
+    "eventTriger": 0,
+    "eventResult": 5,
+    "isRepeat": 0,
+    "canTrigger": 1,
+    "eventName": "花瓶获得碎片"
 }
 ]
