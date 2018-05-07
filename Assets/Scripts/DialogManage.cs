@@ -9,8 +9,8 @@ namespace GameJam
     {
         public static DialogManage m_me;
         private bool m_bIsStartDialog;              // 是否开始对话
-        private List<DialogNode> m_arrDialogArr;    // 对话List
-        private DialogNode m_curDialogNode;         // 当前对话Node
+        private List<DialogNodeConfig> m_arrDialogArr;    // 对话List
+        private DialogNodeConfig m_curDialogNode;         // 当前对话Node
         private int m_iCurDialogItemIndex;          // 当前对话Item索引
 
         private Text m_tTalkText;
@@ -68,7 +68,7 @@ namespace GameJam
         }
 
         // 根据名称 获取对话Node
-        public DialogNode GetDialogNodeByID(int dialogID)
+        public DialogNodeConfig GetDialogNodeByID(int dialogID)
         {
             //Debug.Log("DialogManage::GetDialogNodeByName: " + name);
             if (dialogID != 0 && null != m_arrDialogArr)
@@ -90,7 +90,7 @@ namespace GameJam
         public void StartDialogByID(int dialogID)
         {
             //Debug.Log("DialogManage::StartDialogByName：" + name);
-            DialogNode tempNode = GetDialogNodeByID(dialogID);
+            DialogNodeConfig tempNode = GetDialogNodeByID(dialogID);
             if (null == tempNode)
             {
                 //Debug.Log("DialogManage::StartDialogByName：" + name + " tempNode is null");
@@ -126,7 +126,7 @@ namespace GameJam
         }
 
         // 显示单个对话Item
-        public void ShowDialogText(DialogItem item)
+        public void ShowDialogText(DialogItemConfig item)
         {
             m_tTalkText.text = item.Name + " : " + item.DialogText;
             Sprite sp = Resources.Load<Sprite>(item.IconPath);

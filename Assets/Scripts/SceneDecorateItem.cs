@@ -14,7 +14,7 @@ namespace GameJam
         [Tooltip("物体能够触发的事件的id数组")]
         public List<int> m_eventIDs = null;   //事件的id数组
 
-        private List<GameEvent> m_eventList = null; //可触发事件的列表,在运行时根据在unity编辑器里配置的IDs数组赋值
+        private List<GameEventConfig> m_eventList = null; //可触发事件的列表,在运行时根据在unity编辑器里配置的IDs数组赋值
         //private int m_eventCanTriggerCount = 0; //当前状态可触发的事件数量,用于判断要不要出交互item
         private SpriteRenderer m_spRenderer;
         private PolygonCollider2D m_collider;
@@ -35,13 +35,13 @@ namespace GameJam
             {
                 TouchItemPrefab = (GameObject)Resources.Load("Prefabs/TouchMe");
             }
-            m_eventList = new List<GameEvent>();
+            m_eventList = new List<GameEventConfig>();
             //添加事件，好像效率有点低，需要循环两个表
             if (m_eventIDs != null)
             {
                 foreach (int id in m_eventIDs)
                 {
-                    foreach (GameEvent e in GameConfig.instance.eventConfigs)
+                    foreach (GameEventConfig e in GameConfig.instance.eventConfigs)
                     {
                         if (e.eventID == id)
                         {
@@ -65,7 +65,7 @@ namespace GameJam
             if (null != m_eventList && m_eventList.Count > 0) {
                 for (int i = 0; i < m_eventList.Count; )
                 {
-                    GameEvent e = m_eventList[i];
+                    GameEventConfig e = m_eventList[i];
                     deleteEventTrigger = doEventTrigger(e);
                     if (deleteEventTrigger)
                     {
@@ -83,7 +83,7 @@ namespace GameJam
         }
 
         //加个返回值判断下事件触发了需不要删除
-        bool doEventTrigger(GameEvent gEvent)
+        bool doEventTrigger(GameEventConfig gEvent)
         {
             bool deleteEventTrigger = true; //默认触发了就删掉, 除非触发失败或者事件可以多次触发
             //如果有触发条件但是玩家对应的物品状态不符合那就不触发

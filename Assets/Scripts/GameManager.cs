@@ -21,8 +21,8 @@ namespace GameJam
         private int level = 1;                                  //Current level number, expressed in game as "Day 1".
         private bool doingSetup = false;						//Boolean to check if we're setting up board, prevent Player from moving during setup.
 
-        private List<GameItem> m_allItems;                      //All items, load from config.
-        private List<GameItem> m_playersItems;                  //player's items.
+        private List<GameItemConfig> m_allItems;                      //All items, load from config.
+        private List<GameItemConfig> m_playersItems;                  //player's items.
         
 
         //Awake is always called before any Start functions
@@ -74,7 +74,7 @@ namespace GameJam
         {
             loadGameConfig();
 
-            m_playersItems = new List<GameItem>();
+            m_playersItems = new List<GameItemConfig>();
         }
 
         //Update is called every frame.
@@ -92,7 +92,7 @@ namespace GameJam
 
         public void AddItemToPlayer(int itemID)
         {
-            foreach (GameItem item in m_allItems)
+            foreach (GameItemConfig item in m_allItems)
             {
                 if (item.itemID == itemID)
                 {
@@ -107,7 +107,7 @@ namespace GameJam
         {
             bool flag = false;
             //待改进，后面重构下，用find来搜索
-            foreach (GameItem item in m_playersItems)
+            foreach (GameItemConfig item in m_playersItems)
             {
                 if (item.itemID == itemID)
                 {
@@ -130,6 +130,8 @@ namespace GameJam
         {
             doingSomething = true;
             //Wait for turnDelay seconds, defaults to .1 (100 ms).
+            yield return new WaitForSeconds(turnDelay);
+            yield return new WaitForSeconds(turnDelay);
             yield return new WaitForSeconds(turnDelay);
             yield return new WaitForSeconds(turnDelay);
 

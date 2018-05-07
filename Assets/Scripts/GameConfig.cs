@@ -19,7 +19,7 @@ namespace GameJam
 
     // 事件
     [System.Serializable]
-    public struct GameEvent
+    public struct GameEventConfig
     {
         public int eventID { get; set; }           //事件id
         public DecorateType eventType { get; set; } //事件类型：0无，1随机倒地，2顺序，3触发对话，4获得物品
@@ -31,7 +31,7 @@ namespace GameJam
 
     //物品
     [System.Serializable]
-    public struct GameItem
+    public struct GameItemConfig
     {
         public int itemID { get; set; }
         public string itemName { get; set; }
@@ -39,7 +39,7 @@ namespace GameJam
 
     //单句对话
     [System.Serializable]
-    public class DialogItem
+    public class DialogItemConfig
     {
         public string Name { get; set; }
         public string DialogText { get; set; }
@@ -48,26 +48,26 @@ namespace GameJam
 
     //一段对话
     [System.Serializable]
-    public class DialogNode
+    public class DialogNodeConfig
     {
         public int DialogID { get; set; }
         public string DialogName { get; set; }
         //public DialogItem[] DialogArr { get; set; }
-        public List<DialogItem> DialogArr { get; set; }
+        public List<DialogItemConfig> DialogArr { get; set; }
     }
 
     public class GameConfig : MonoBehaviour
     {
         [HideInInspector]
-        public List<GameItem> itemConfigs { get; set; } //物品配置
+        public List<GameItemConfig> itemConfigs { get; set; } //物品配置
         private string itemConfigsPath = "Data/itemConfigs.txt";
 
         [HideInInspector]
-        public List<GameEvent> eventConfigs { get; set; } //事件配置
+        public List<GameEventConfig> eventConfigs { get; set; } //事件配置
         private string eventConfigsPath = "Data/eventConfigs.txt";
 
         [HideInInspector]
-        public List<DialogNode> dialogConfigs { get; set; } //对话配置
+        public List<DialogNodeConfig> dialogConfigs { get; set; } //对话配置
         private string dialogConfigsPath = "Data/dialogText.txt";
         
 
@@ -102,9 +102,9 @@ namespace GameJam
 
         void LoadGameConfigs()
         {
-            itemConfigs = LoadJsonConfigs<GameItem>(itemConfigsPath);
-            eventConfigs = LoadJsonConfigs<GameEvent>(eventConfigsPath);
-            dialogConfigs = LoadJsonConfigs<DialogNode>(dialogConfigsPath);
+            itemConfigs = LoadJsonConfigs<GameItemConfig>(itemConfigsPath);
+            eventConfigs = LoadJsonConfigs<GameEventConfig>(eventConfigsPath);
+            dialogConfigs = LoadJsonConfigs<DialogNodeConfig>(dialogConfigsPath);
         }
         void Awake() {
             //Check if instance already exists

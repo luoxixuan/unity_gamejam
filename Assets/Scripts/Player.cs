@@ -12,9 +12,11 @@ namespace GameJam
         public AudioClip m_moveSound2;              //2 of 2 Audio clips to play when player moves.
         public AudioClip m_gameOverSound;             //Audio clip to play when player dies.
         public Text m_foodText;                     //UI Text to display current player food total.
+        public int m_speed = 1;                     //UI Text to display current player food total.
 
         private Animator m_animator;                    //Used to store a reference to the Player's animator component.
-        private int m_playFood;                           //Used to store player food points total during level.
+        private int m_playFood;                         //Used to store player food points total during level.
+        private int m_lastHorizental;                   //上次走的横轴面向
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
         private Vector2 touchOrigin = -Vector2.one;	//Used to store location of screen touch origin for mobile controls.
 #endif
@@ -127,7 +129,13 @@ namespace GameJam
             {
                 //Call AttemptMove passing in the generic parameter Wall, since that is what Player may interact with if they encounter one (by attacking it)
                 //Pass in horizontal and vertical as parameters to specify the direction to move Player in.
-                AttemptMove<Wall>(horizontal, vertical);
+                // 调整角色面向
+                if (m_lastHorizental != horizontal && horizontal != 0) {
+                    float ratationY = horizontal < 0 ? -180 : 0;
+                    gameObject.transform.rotation = new Quaternion(0, ratationY, 0, 0);
+                    m_lastHorizental = horizontal;
+                }
+                AttemptMove<Wall>(horizontal * m_speed, vertical); //只有横轴的速度可以调。。主要是为了同步走路的动画
             }
         }
 
@@ -159,11 +167,11 @@ namespace GameJam
                 //Debug.Log("player move once");
             }
 
-            //Since the player has moved and lost food points, check if the game has ended.
-            CheckIfGameOver();
-
             //Set the playersTurn boolean of GameManager to false now that players turn is over.
             GameManager.instance.playersTurn = false;
+
+            //Since the player has moved and lost food points, check if the game has ended.
+            CheckIfGameOver();
         }
 
 
