@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace GameJam
-{	
-	public class Loader : MonoBehaviour
+{
+    public class Loader : MonoBehaviour
     {
         public GameObject gameConfgs;          //GameManager prefab to instantiate.
         public GameObject gameManager;			//GameManager prefab to instantiate.
