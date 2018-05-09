@@ -110,7 +110,7 @@ MonoBehaviour:
   m_MinSize: {x: 713, y: 563}
   m_MaxSize: {x: 18008, y: 14042}
   vertical: 0
-  controlID: 5683
+  controlID: 1078
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_MinSize: {x: 202, y: 563}
   m_MaxSize: {x: 4002, y: 12063}
   vertical: 1
-  controlID: 5848
+  controlID: 1208
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -236,7 +236,7 @@ MonoBehaviour:
   m_MinSize: {x: 234, y: 492}
   m_MaxSize: {x: 10004, y: 14042}
   vertical: 1
-  controlID: 5602
+  controlID: 997
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -255,8 +255,8 @@ MonoBehaviour:
     y: 0
     width: 490
     height: 486
-  m_MinSize: {x: 204, y: 221}
-  m_MaxSize: {x: 4004, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 19}
   m_Panes:
   - {fileID: 19}
@@ -631,7 +631,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: b64af2ff9a4bf2ffe84cf2ff7854f2ff4e55f2ff9e56f2ff9cfbffff00000000d02a0000a82b0000
+    m_ExpandedIDs: 4cb7ffff2ab8ffff7ab9ffff42c4ffff1ec5ffff6ec6ffff9cfbffff00000000ac2b0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -693,18 +693,18 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/StreamingAssets
+    - Assets/Resources/Fonts
   m_ViewMode: 1
   m_StartGridSize: 96
   m_LastFolders:
-  - Assets/StreamingAssets
+  - Assets/Resources/Fonts
   m_LastFoldersGridSize: 96
   m_LastProjectPath: F:\CodeWork\unity_gamejam
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: e6290000
-    m_LastClickedID: 10726
+    m_SelectedIDs: b2290000
+    m_LastClickedID: 10674
     m_ExpandedIDs: 0000000084290000d2290000442c0000462c0000482c00004a2c00004c2c00004e2c000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0

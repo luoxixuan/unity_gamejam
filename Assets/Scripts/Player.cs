@@ -9,7 +9,7 @@ namespace GameJam
         public AudioClip m_moveSound1;              //1 of 2 Audio clips to play when player moves.
         public AudioClip m_moveSound2;              //2 of 2 Audio clips to play when player moves.
         public AudioClip m_gameOverSound;             //Audio clip to play when player dies.
-        public Text m_foodText;                     //UI Text to display current player food total.
+        public Text m_timeLeft;                     //UI Text to display current player food total.
         public int m_speed = 1;                     //UI Text to display current player food total.
 
         private Animator m_animator;                    //Used to store a reference to the Player's animator component.
@@ -30,7 +30,7 @@ namespace GameJam
             m_playFood = GameManager.instance.playerFoodPoints;
 
             //Set the foodText to reflect the current player food total.
-            m_foodText.text = "Food: " + m_playFood;
+            //m_timeLeft.text = "Food: " + m_playFood;
 
             //Call the Start function of the MovingObject base class.
             base.Start();
@@ -116,7 +116,7 @@ namespace GameJam
                         vertical = Mathf.Abs(y) > 1? vertical : 0;
                     }
                     
-                    m_foodText.text = touchEnd.x + "," + touchEnd.y;
+                    //m_timeLeft.text = touchEnd.x + "," + touchEnd.y;
 
                 }
 			}
