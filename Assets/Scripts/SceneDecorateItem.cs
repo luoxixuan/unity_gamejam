@@ -81,21 +81,50 @@ namespace GameJam
             
         }
 
+        private bool isEventTrigger(List<EventTriggerState> eventTriggers)
+        {
+            if (eventTriggers == null || eventTriggers.Count <= 0) return true; //Count == 0说明不需要条件
+            //如果有触发条件但是玩家对应的物品状态不符合那就不触发
+            //大于0表示需要这个物品才能触发,小于0表示没有这物品才能触发
+            bool flag = true;
+            foreach (EventTriggerState trigger in eventTriggers)
+            {
+                switch (trigger.triggerType)
+                {
+                    case TriggerType.TrigType_None:
+                        Debug.Log("Unknown TriggerType.TrigType_None!");
+                        break;
+
+                    case TriggerType.TrigType_Item:
+                        if ((trigger.triggerID > 0 && !GameManager.instance.PlayHasItem(trigger.triggerID, trigger.triggerNum)) || (trigger.triggerID < 0 && GameManager.instance.PlayHasItem(-trigger.triggerID, trigger.triggerNum)))
+                        {
+                            return false; //只要一个条件不满足就直接返回false
+                        }
+                        break;
+
+                    case TriggerType.TrigType_Event: //事件触发，现在还没有
+                        break;
+
+                    case TriggerType.TrigType_Talk: //对话触发，现在还没有
+                        break;
+
+                    default:
+                        Debug.Log("Unknown EventTriggerState!");
+                        break;
+                }
+                    
+            }
+            return flag; //能走到这说明条件全满足了
+        }
+
         //加个返回值判断下事件触发了需不要删除
         bool doEventTrigger(GameEventConfig gEvent)
         {
             bool deleteEventTrigger = true; //默认触发了就删掉, 除非触发失败或者事件可以多次触发
-            //如果有触发条件但是玩家对应的物品状态不符合那就不触发
-            if (gEvent.eventTriger > 0 && !GameManager.instance.PlayHasItem(gEvent.eventTriger)) //大于0表示需要这个物品才能触发
-            {
-                return false;
+            if (!isEventTrigger(gEvent.eventTriggers)) {
+                return false; //不能触发事件就返回
             }
-            else if (gEvent.eventTriger < 0 && GameManager.instance.PlayHasItem(-gEvent.eventTriger)) //小于0表示没有这物品才能触发
-            {
-                return false;
-            }
-
-                DecorateType eventType = gEvent.eventType;
+            DecorateType eventType = gEvent.eventType;
             //Debug.Log("SceneDecorateItem::doTrigger: " + m_eDecType);
             if (eventType == DecorateType.DecType_Random)
             {
@@ -151,7 +180,7 @@ namespace GameJam
                 }
                 else if (gEvent.eventResult > 0)
                 {
-                    //GameManager.instance.enabled = false;
+                    //GameManager.instance.GameOver(); 暂时就让他自己走吧
                 }
             }
 

@@ -140,6 +140,9 @@ namespace GameJam
 
         private void Update()
         {
+            if (!GameManager.instance.enabled) {
+                enabled = false; //游戏结束不让动了
+            }
             CheckPlayerMove();
         }
 

@@ -77,7 +77,7 @@
         {
             "Name": "我",
             "IconPath": "Sprites/head",
-            "DialogText": "解开花瓶纹路上的谜题，获得【照片碎片】"
+            "DialogText": "解开花瓶纹路上的谜题，获得【照片碎片*1】"
         }
     ]
 },
@@ -104,25 +104,63 @@
     ]
 },
 {
-	"DialogID":10,
-    "DialogName": "有怀表对话",
+    "DialogID":10,
+    "DialogName": "有翻译机没碎片对话",
     "DialogArr": [
         {
             "Name": "黑猫",
             "IconPath": "Sprites/cat",
-            "DialogText": "“你已经死掉了哦，如果找到怀表给我...”"
+            "DialogText": "“你已经死掉了哦，如果找到怀表给我。”"
         },
         {
             "Name": "黑猫",
             "IconPath": "Sprites/cat",
-            "DialogText": "“哦，你已经找到了吗？我会送你到三小时以前”"
+            "DialogText": "“或许我会给你一次重来的机会”"
         },
         {
             "Name": "黑猫",
             "IconPath": "Sprites/cat",
-            "DialogText": "“给你重来一次的机会。”"
+            "DialogText": "黑猫移开，露出【照片碎片*1】"
         }
 
+    ]
+},
+{
+	"DialogID":11,
+    "DialogName": "有怀表和翻译机对话",
+    "DialogArr": [
+        {
+            "Name": "黑猫",
+            "IconPath": "Sprites/cat",
+            "DialogText": "“我会送你到三小时以前”"
+        },
+        {
+            "Name": "黑猫",
+            "IconPath": "Sprites/cat",
+            "DialogText": "“给你重来一次的机会”"
+        },
+        {
+            "Name": "猫",
+            "IconPath": "Sprites/cat",
+            "DialogText": "这游戏的试玩到此结束了哦。"
+        },
+        {
+            "Name": "猫",
+            "IconPath": "Sprites/cat",
+            "DialogText": "请期待我们的后续噢。"
+        }
+
+    ]
+},
+{
+    "DialogID":12,
+    "DialogName": "床底获得照片碎片对话",
+    "DialogArr": [
+        {
+            "Name": "我",
+            "IconPath": "Sprites/head",
+            "DialogText": "获得【照片碎片*1】"
+        }
     ]
 }
 ]

@@ -6,6 +6,11 @@ namespace GameJam
 {
     using System.Collections.Generic;		//Allows us to use Lists. 
 
+    public struct PlayerItem {
+        public int itemNum { get; set; }
+        public GameItemConfig itemData { get; set; }
+    }
+
     public class GameManager : MonoBehaviour
     {
         public float turnDelay = 0.1f;                          //Delay between each Player turn.
@@ -19,10 +24,9 @@ namespace GameJam
         public bool doingSomething = false;   //Boolean to check if players is doSomething, hidden in inspector but public.
 
         private int level = 1;                                  //Current level number, expressed in game as "Day 1".
-        private bool doingSetup = false;						//Boolean to check if we're setting up board, prevent Player from moving during setup.
-
-        private List<GameItemConfig> m_allItems;                      //All items, load from config.
-        private List<GameItemConfig> m_playersItems;                  //player's items.
+        private bool doingSetup = false;                        //Boolean to check if we're setting up board, prevent Player from moving during setup.
+        
+        private Dictionary<int,PlayerItem> m_playersItems;      //player's items.
         
 
         //Awake is always called before any Start functions
@@ -66,15 +70,22 @@ namespace GameJam
 
         void loadGameConfig()
         {
-            m_allItems = GameConfig.instance.itemConfigs;
+            m_playersItems = new Dictionary<int, PlayerItem>();
+            PlayerItem playerItem = new PlayerItem();
+            foreach (GameItemConfig itemConfig in GameConfig.instance.itemConfigs)
+            {
+                // 把物品表也初始化一下
+                playerItem.itemData = itemConfig;
+                playerItem.itemNum = 0;
+                m_playersItems.Add(itemConfig.itemID, playerItem);
+            }
+            
         }
 
         //Initializes the game for each level.
         void InitGame()
         {
             loadGameConfig();
-
-            m_playersItems = new List<GameItemConfig>();
         }
 
         //Update is called every frame.
@@ -90,31 +101,56 @@ namespace GameJam
             StartCoroutine(DoSomeThing());
         }
 
-        public void AddItemToPlayer(int itemID)
-        {
-            foreach (GameItemConfig item in m_allItems)
-            {
-                if (item.itemID == itemID)
-                {
-                    m_playersItems.Add(item);
-                    Debug.Log("获得物品：" + item.itemName);
-                    break;
-                }
-            }
-        }
-
-        public bool PlayHasItem(int itemID)
+        public bool DelPlayerItem(int itemID)
         {
             bool flag = false;
-            //待改进，后面重构下，用find来搜索
-            foreach (GameItemConfig item in m_playersItems)
+            
+            if (m_playersItems.ContainsKey(itemID))
             {
-                if (item.itemID == itemID)
+                if (m_playersItems[itemID].itemNum == 0) {
+                    return false; //没这物品，删除失败
+                }
+
+                PlayerItem playerItem = m_playersItems[itemID];
+                playerItem.itemNum--;
+                m_playersItems[itemID] = playerItem; //蛋疼，只能改了再赋值回去
+                Debug.Log("删除物品：" + playerItem.itemData.itemName);
+                flag = true;
+            }
+
+            return flag;
+        }
+
+        public bool AddItemToPlayer(int itemID)
+        {
+            bool flag = false;
+
+            if (m_playersItems.ContainsKey(itemID))
+            {
+                PlayerItem playerItem = m_playersItems[itemID];
+                playerItem.itemNum++;
+                m_playersItems[itemID] = playerItem; //蛋疼，只能改了再赋值回去
+                flag = true;
+
+                Debug.Log("获得物品：" + playerItem.itemData.itemName);
+            }
+
+            return flag; //如果物品表没这物品就返回失败
+        }
+
+        public bool PlayHasItem(int itemID, int num)
+        {
+            bool flag = false;
+
+            if (m_playersItems.ContainsKey(itemID))
+            {
+                if (m_playersItems[itemID].itemNum >= num)
                 {
                     flag = true;
-                    break;
+                    Debug.Log("玩家有足够的物品：" + m_playersItems[itemID].itemData.itemName);
                 }
             }
+
             return flag;
         }
 
@@ -123,6 +159,7 @@ namespace GameJam
         {
             //Disable this GameManager.
             enabled = false;
+            
         }
 
         //Coroutine to move enemies in sequence.

@@ -16,16 +16,35 @@ namespace GameJam
         DecType_GameOver,// 游戏结束
     }
 
+    //事件触发条件类型
+    public enum TriggerType
+    {
+        TrigType_None,  // 无
+        TrigType_Item,  // 物品触发
+        TrigType_Event, // 事件触发
+        TrigType_Talk,  // 对话触发
+    }
+
+    //事件触发条件
+    [System.Serializable]
+    public struct EventTriggerState
+    {
+        public TriggerType triggerType { get; set; }    //触发条件类型，1物品触发，2事件触发，3对话触发
+        public int triggerID { get; set; }              //触发条件ID，如果是物品触发那就是物品ID，事件就是事件ID，对话就是对话ID，大于0是需要有这物品，小于零表示需要没有这物品
+        public int triggerNum { get; set; }             //触发需要的数量，通常是物品触发需要的物品数量，一般就填1
+    }
+
     // 事件
     [System.Serializable]
     public struct GameEventConfig
     {
         public int eventID { get; set; }           //事件id
+        public string eventName { get; set; }      //事件名字
         public DecorateType eventType { get; set; } //事件类型：0无，1随机倒地，2顺序，3触发对话，4获得物品
-        public int eventTriger { get; set; }     //触发事件的前置条件，暂时就是物品id吧，0就是没条件，大于0的id表示有这个物品才能触发，小于0的表示没有这物品才能触发
         public int eventResult { get; set; }     //如果是获得物品的事件那就是物品id，如果是对话，暂时就是对话的名字，如果是物品落地之类的；
         public int isRepeat { get; set; }        //0不能重复触发，1可以重复触发；
         public int canTrigger { get; set; }      //0当前游戏状态不能触发，1可以触发，这个状态在配置里就配成1就行
+        public List<EventTriggerState> eventTriggers { get; set; }     //触发事件的前置条件，暂时就是物品id吧，0就是没条件，大于0的id表示有这个物品才能触发，小于0的表示没有这物品才能触发
     }
 
     //物品

@@ -17,6 +17,6 @@
 },
 {
     "itemID": 5,
-    "itemName": "照片碎片"
+    "itemName": "照片碎片*1"
 }
 ]
